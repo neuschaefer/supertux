@@ -807,7 +807,7 @@ BadGuy::bump()
 void
 BadGuy::squish_me(Player* player)
 {
-  player->jump_of_badguy(this);
+  player->jump_off_badguy(this);
     
   World::current()->add_score(base.x - scroll_x,
                               base.y, 50 * player_status.score_multiplier);
@@ -828,7 +828,7 @@ BadGuy::squish(Player* player)
     // mrbomb transforms into a bomb now
     World::current()->add_bad_guy(base.x, base.y, BAD_BOMB);
    
-    player->jump_of_badguy(this);
+    player->jump_off_badguy(this);
     World::current()->add_score(base.x - scroll_x, base.y, 50 * player_status.score_multiplier);
     play_sound(sounds[SND_SQUISH], SOUND_CENTER_SPEAKER);
     player_status.score_multiplier++;
@@ -862,7 +862,7 @@ BadGuy::squish(Player* player)
         set_sprite(img_mriceblock_flat_left, img_mriceblock_flat_right);
       }
 
-    player->jump_of_badguy(this);
+    player->jump_off_badguy(this);
 
     player_status.score_multiplier++;
 
@@ -879,7 +879,7 @@ BadGuy::squish(Player* player)
     if(physic.get_velocity_y() >= 0)
       return;
     
-    player->jump_of_badguy(this);
+    player->jump_off_badguy(this);
 	      
     World::current()->add_score(base.x - scroll_x, base.y, 25 * player_status.score_multiplier);
     player_status.score_multiplier++;

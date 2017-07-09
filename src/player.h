@@ -151,7 +151,8 @@ public:
   bool under_solid();
   void grow();
 
-  void jump_of_badguy(BadGuy* badguy);
+  /** Send Tux up again, after he jumped on a badguy */
+  void jump_off_badguy(BadGuy* badguy);
   
   std::string type() { return "Player";};
   

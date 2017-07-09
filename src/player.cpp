@@ -497,7 +497,7 @@ Player::grow()
 }
 
 void
-Player::jump_of_badguy(BadGuy* badguy)
+Player::jump_off_badguy(BadGuy* badguy)
 {
   if(input.up)
     physic.set_velocity_y(5.2);
