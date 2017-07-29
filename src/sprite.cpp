@@ -30,7 +30,7 @@ Sprite::Sprite(lisp_object_t* cur)
   LispReader reader(cur);
 
   if(!reader.read_string("name",   &name))
-    st_abort("Sprite wihtout name", "");
+    st_abort("Sprite without name", "");
   reader.read_int("x-hotspot", &x_hotspot);
   reader.read_int("y-hotspot", &y_hotspot);
   reader.read_float("fps",     &fps);

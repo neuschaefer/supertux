@@ -200,7 +200,7 @@ Tile::draw(float x, float y, unsigned int c, Uint8 alpha)
             }
           else
             {
-              //printf("Tile not dravable %u\n", c);
+              //printf("Tile not drawable %u\n", c);
             }
         }
     }
@@ -224,7 +224,7 @@ Tile::draw_stretched(float x, float y, int w, int h, unsigned int c, Uint8 alpha
             }
           else
             {
-              //printf("Tile not dravable %u\n", c);
+              //printf("Tile not drawable %u\n", c);
             }
         }
     }

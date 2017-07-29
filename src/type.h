@@ -38,7 +38,7 @@ struct base_type
 };
 
 
-/* Base class for all dynamic game object. */
+/* Base class for all dynamic game objects. */
 class GameObject
 {
 

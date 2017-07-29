@@ -166,7 +166,7 @@ BadGuy::BadGuy(float x, float y, BadGuyKind kind_, bool stay_on_platform_)
     set_sprite(img_jumpy_left_up, img_jumpy_left_up);
   } else if(kind == BAD_BOMB) {
     set_sprite(img_mrbomb_ticking_left, img_mrbomb_ticking_right);
-    // hack so that the bomb doesn't hurt until it expldes...
+    // hack so that the bomb doesn't hurt until it explodes...
     dying = DYING_SQUISHED;
   } else if(kind == BAD_FLAME) {
     base.ym = 0; // we misuse base.ym as angle for the flame
@@ -769,7 +769,7 @@ BadGuy::set_sprite(Sprite* left, Sprite* right)
   else
     {
       // FIXME: Using the image size for the physics and collision is
-      // a bad idea, since images should always overlap there physical
+      // a bad idea, since images should always overlap their physical
       // representation
       if(left != 0) {
         if(base.width == 0 && base.height == 0) {
@@ -822,7 +822,7 @@ BadGuy::squish_me(Player* player)
 void
 BadGuy::squish(Player* player)
 {
-  static const int MAX_ICEBLOCK_SQUICHES = 10;
+  static const int MAX_ICEBLOCK_SQUISHES = 10;
     
   if(kind == BAD_MRBOMB) {
     // mrbomb transforms into a bomb now
@@ -866,9 +866,9 @@ BadGuy::squish(Player* player)
 
     player_status.score_multiplier++;
 
-    // check for maximum number of squiches
+    // check for maximum number of squishes
     squishcount++;
-    if(squishcount >= MAX_ICEBLOCK_SQUICHES) {
+    if(squishcount >= MAX_ICEBLOCK_SQUISHES) {
       kill_me(50);
       return;
     }

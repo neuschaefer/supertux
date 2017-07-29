@@ -49,7 +49,7 @@ bool collision_object_map(const base_type& object);
 /** Return a pointer to the tile at the given x/y coordinates */
 Tile* gettile(float x, float y);
 
-// Some little helper function to check for tile properties
+// Some little helper functions to check for tile properties
 bool  issolid(float x, float y);
 bool  isbrick(float x, float y);
 bool  isice(float x, float y);

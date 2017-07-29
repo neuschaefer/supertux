@@ -102,7 +102,7 @@ class Level
   Level(const std::string& filename);
   ~Level();
 
-  /** Will the Level structure with default values */
+  /** Fill the Level structure with default values */
   void init_defaults();
   
   /** Cleanup the level struct from allocated tile data and such */

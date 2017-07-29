@@ -67,7 +67,7 @@ SpriteManager::load_resfile(const std::string& filename)
             {
               delete i->second;
               i->second = sprite;
-              std::cout << "Warning: dulpicate entry: '" << sprite->get_name() << "'" << std::endl;
+              std::cout << "Warning: duplicate entry: '" << sprite->get_name() << "'" << std::endl;
             }
         }
       else

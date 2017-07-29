@@ -63,7 +63,7 @@
 #define SELECT_CLR 0, 255, 0, 255  // lines color (R, G, B, A)
 
 /* own declerations */
-/* crutial ones (main loop) */
+/* crucial ones (main loop) */
 int le_init();
 void le_quit();
 int le_load_level_subset(char *filename);
@@ -103,7 +103,7 @@ struct TileOrObject
 
 /* leveleditor internals */
 static string_list_type level_subsets;
-static bool le_level_changed;  /* if changes, ask for saving, when quiting*/
+static bool le_level_changed;  /* if changed, ask for saving, when quitting */
 static bool show_minimap;
 static bool show_selections;
 static bool le_help_shown;

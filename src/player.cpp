@@ -532,7 +532,7 @@ Player::grabdistros()
       player_status.distros = player_status.distros - DISTROS_LIFEUP;
       if(player_status.lives < MAX_LIVES)
         ++player_status.lives;
-      /*We want to hear the sound even, if MAX_LIVES is reached*/
+      /* We want to hear the sound, even if MAX_LIVES is reached */
       play_sound(sounds[SND_LIFEUP], SOUND_CENTER_SPEAKER);
     }
 }
@@ -754,7 +754,7 @@ Player::check_bounds(bool back_scrolling, bool hor_autoscroll)
 {
   /* Keep tux in bounds: */
   if (base.x < 0)
-    { // Lock Tux to the size of the level, so that he doesn't fall of
+    { // Lock Tux to the size of the level, so that he doesn't fall off
       // on the left side
       base.x = 0;
     }

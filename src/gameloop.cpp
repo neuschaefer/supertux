@@ -646,7 +646,7 @@ GameSession::run()
 
       /* Pause till next frame, if the machine running the game is too fast: */
       /* FIXME: Works great for in OpenGl mode, where the CPU doesn't have to do that much. But
-         the results in SDL mode aren't perfect (thought the 100 FPS are reached), even on an AMD2500+. */
+         the results in SDL mode aren't perfect (though the 100 FPS are reached), even on an AMD2500+. */
       if(last_update_time >= update_time - 12) 
         {
           SDL_Delay(10);

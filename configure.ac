@@ -58,7 +58,7 @@ else
     AC_MSG_RESULT([disabled])
 fi
 
-AC_MSG_CHECKING(wether OpenGL should be used)
+AC_MSG_CHECKING(whether OpenGL should be used)
 AC_ARG_ENABLE(opengl,
               AC_HELP_STRING([--disable-opengl], [disable OpenGL support]),, enable_opengl="yes")
 if test "x${enable_opengl}" != "xno"; then

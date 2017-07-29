@@ -197,7 +197,7 @@ class LispWriter
     void write_symbol (const char* name, const char* symname);
     void write_lisp_obj(const char* name, lisp_object_t* lst);
 
-    /** caller is responible to free the returned lisp_object_t */
+    /** caller is responsible to free the returned lisp_object_t */
     lisp_object_t* create_lisp ();
   };
 

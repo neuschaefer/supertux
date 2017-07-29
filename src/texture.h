@@ -84,7 +84,7 @@ public:
   /** Captures the screen and returns it as Surface*, the user is expected to call the destructor. */
   static Surface* CaptureScreen();
   
-  /** Reload the surface, which is necesarry in case of a mode swich */
+  /** Reload the surface, which is necessary in case of a mode switch */
   void reload();
 
   void draw(float x, float y, Uint8 alpha = 255, bool update = false);

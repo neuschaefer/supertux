@@ -87,7 +87,7 @@ public:
 
   /** If true the enemy will stay on its current platform, ie. if he
       reaches the edge he will turn around and walk into the other
-      direction, if false the enemy will jump or walk of the edge */
+      direction, if false the enemy will jump or walk off the edge */
   bool stay_on_platform;
 
   Direction dir;
@@ -95,7 +95,7 @@ public:
 private:
   bool removable;
   bool seen;
-  int squishcount; /// number of times this enemy was squiched
+  int squishcount; /// number of times this enemy was squished
   Timer timer;
   Physic physic;
 
@@ -156,7 +156,7 @@ private:
   void bump();
   /** called when a player jumped on the badguy from above */
   void squish(Player* player);
-  /** squish ourself, give player score and set dying to DYING_SQICHED */
+  /** squish ourself, give player score and set dying to DYING_SQUISHED */
   void squish_me(Player* player);
   /** set image of the badguy */
   void set_sprite(Sprite* left, Sprite* right);

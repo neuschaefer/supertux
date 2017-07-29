@@ -207,7 +207,7 @@ void draw_demo(GameSession* session, double frame_ratio)
       walking = !walking;
     }
 
-  // Wrap around at the end of the level back to the beginnig
+  // Wrap around at the end of the level back to the beginning
   if(plevel->width * 32 - 320 < tux->base.x)
     {
       tux->level_begin();
