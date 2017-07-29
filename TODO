@@ -1,1 +1,54 @@
-release 0.1.3 :-)
+jn plans to do
+* fork 0.1.3 as retrotux (not sure about the exact spelling)
+  + update documentation
+* use pkg-config to find external libraries such as SDL
+* update SDL?
+* check/add/backport joystick/gamepad support
+  + setup: if(use_joystick) is commented out
+* don't use wildcards in automake files
+* document coding style?
+* check if we really need automake 1.6
+* have fun :-)
+* Doxygen/sphinx?
+* clean up compiler warnings a little
+* run with asan etc?
+  + requires cooperating SDL?
+* https://www.youtube.com/watch?v=WUQaopsRYz0
+* bitmask code: move to explicit int sizes. update from upstream?
+* audit/fix sprintf/strcpy usage
+* git grep distro
+* clean up defines.h
+* look at Gameloop::subset
+* what's a FloatingScore?
+* check highscore code. it smells dead
+* document TileMapType
+* \n-terminate printf'd strings
+* check faccessible usage in src/level.cpp
+* copy stuff from the aur package
+  + https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=supertux-old
+* .travis.yml
+* run codespell
+* upstream stuff that applies to upstream
+* check string_list_* stuff: can i replace it with equivalent STL classes?
+* confirm_dialog vs. Esc?
+* use strdup in few places (notably menu.cpp)
+* investigate MC_FRAME_PERIOD. Why does something take 800ms?
+* check if SDL_mixer still crashes when loading/freeing a lot of music files
+  + and generally rework the reference holding system in music*.cpp
+* inverse_velocity_* -> invert_velocity_*
+* physic: move short functions to physic.h to make them inlinable
+  + check with objdump!
+* remove tux-duck.png after comparing it to tux-duck-left.png
+* resources: fix that "if (use_sound)" thing
+* clean up screen.cpp: use static, remove dead stuff
+* setup: kill free_strings
+* herrings... they're stars now.
+* clean up Sprite::update
+* SpriteManager: consistenly use typedef Sprites.
+* Text::erasetext doesn't seem to be used; why?
+* grep for TODO, FIXME, etc.
+* add const to some methods
+* trace data/images/status/choose-level-subset.png
+* title: fix generate_contrib_menu, it doesn't seem to work anymore.
+* title: background picture: consider oiltux
+* refactor World::World variants?

@@ -1,0 +1,13 @@
+Fork SuperTux 0.1.3 as retrotux
+
+I am forking the "old" SuperTux, because I grew up with it and I want it to
+live on. SuperTux Milestone 2 is a fine game, and a worthy successor, but it's
+a different game, too.
+
+With retrotux, I will follow these goals:
+* Keep the gameplay, sounds, graphics the same
+* Be light on system resources. I want to play this game on systems with 32MiB
+  of RAM and less!
+* Fix bugs both in the "infrastructure" parts of the codebase and in the UI.
+  For example, there's currently no way to play the bonus levels.
+* Improve the readability of the code base, by cleaning it up a little.
