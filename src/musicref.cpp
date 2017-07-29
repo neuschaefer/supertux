@@ -24,7 +24,7 @@ MusicRef::MusicRef()
 {
 }
 
-MusicRef::MusicRef(MusicManager::MusicResource* newmusic)
+MusicRef::MusicRef(MusicResource* newmusic)
   : music(newmusic)
 {
   if(music)
@@ -50,7 +50,7 @@ MusicRef::MusicRef(const MusicRef& other)
 MusicRef&
 MusicRef::operator =(const MusicRef& other)
 {
-  MusicManager::MusicResource* oldres = music;
+  MusicResource* oldres = music;
   music = other.music;
   if(music)
     music->refcount++;

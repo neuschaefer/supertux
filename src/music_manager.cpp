@@ -133,7 +133,7 @@ MusicManager::enable_music(bool enable)
   }
 }
 
-MusicManager::MusicResource::~MusicResource()
+MusicResource::~MusicResource()
 {
   // buggy SDL_mixer :-/
   // Mix_FreeMusic(music);

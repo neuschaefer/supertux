@@ -35,9 +35,9 @@ public:
 
 private:
   friend class MusicManager;
-  MusicRef(MusicManager::MusicResource* music);
+  MusicRef(MusicResource* music);
   
-  MusicManager::MusicResource* music;
+  MusicResource* music;
 };
 
 #endif

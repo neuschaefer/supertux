@@ -25,6 +25,7 @@
 #include <map>
 
 class MusicRef;
+class MusicResource;
 
 /** This class manages a list of music resources and is responsible for playing
  * the music.
@@ -45,21 +46,22 @@ public:
 
 private:
   friend class MusicRef;
-  class MusicResource
-  {
-  public:
-    ~MusicResource();
-
-    MusicManager* manager;
-    Mix_Music* music;
-    int refcount;
-  };
 
   void free_music(MusicResource* music);
 
   std::map<std::string, MusicResource> musics;
   MusicResource* current_music;
   bool music_enabled;
+};
+
+class MusicResource
+{
+public:
+  ~MusicResource();
+
+  MusicManager* manager;
+  Mix_Music* music;
+  int refcount;
 };
 
 #endif
