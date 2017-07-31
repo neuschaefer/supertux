@@ -75,13 +75,6 @@ MusicManager::exists_music(const std::string& file)
 }
 
 void
-MusicManager::free_music(MusicResource* )
-{
-  // TODO free music, currently we can't do this since SDL_mixer seems to have
-  // some bugs if you load/free alot of mod files.  
-}
-
-void
 MusicManager::play_music(const MusicRef& musicref, int loops)
 {
   if(!audio_device)
@@ -90,12 +83,8 @@ MusicManager::play_music(const MusicRef& musicref, int loops)
   if(musicref.music == 0 || current_music == musicref.music)
     return;
 
-  if(current_music)
-    current_music->refcount--;
-  
   current_music = musicref.music;
-  current_music->refcount++;
-  
+
   if(music_enabled)
     Mix_PlayMusic(current_music->music, loops);
 }
@@ -105,15 +94,10 @@ MusicManager::halt_music()
 {
   if(!audio_device)
     return;
-  
+
   Mix_HaltMusic();
-  
-  if(current_music) {
-    current_music->refcount--;
-    if(current_music->refcount == 0)
-      free_music(current_music);
-    current_music = 0;
-  }
+
+  current_music = 0;
 }
 
 void
@@ -135,7 +119,6 @@ MusicManager::enable_music(bool enable)
 
 MusicResource::~MusicResource()
 {
-  // buggy SDL_mixer :-/
-  // Mix_FreeMusic(music);
+  Mix_FreeMusic(music);
 }
 

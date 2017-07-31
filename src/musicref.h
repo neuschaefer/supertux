@@ -21,8 +21,9 @@
 
 #include "music_manager.h"
 
-/** This class holds a reference to a music file and maintains a correct
- * refcount for that file.
+/**
+ * This class holds a reference to a music file. It does not own the music
+ * file, so it doesn't free it.
  */
 class MusicRef
 {

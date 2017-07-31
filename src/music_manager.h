@@ -47,8 +47,6 @@ public:
 private:
   friend class MusicRef;
 
-  void free_music(MusicResource* music);
-
   std::map<std::string, MusicResource> musics;
   MusicResource* current_music;
   bool music_enabled;
@@ -61,7 +59,6 @@ public:
 
   MusicManager* manager;
   Mix_Music* music;
-  int refcount;
 };
 
 #endif
