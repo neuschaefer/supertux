@@ -45,8 +45,10 @@ BouncyDistro::action(double frame_ratio)
         = std::find(World::current()->bouncy_distros.begin(), 
                     World::current()->bouncy_distros.end(), 
                     this);
-      if (i != World::current()->bouncy_distros.end())
+      if (i != World::current()->bouncy_distros.end()) {
+        delete *i;
         World::current()->bouncy_distros.erase(i);
+      }
     }
 }
 
@@ -83,8 +85,10 @@ BrokenBrick::action(double frame_ratio)
         = std::find(World::current()->broken_bricks.begin(), 
                     World::current()->broken_bricks.end(), 
                     this);
-      if (i != World::current()->broken_bricks.end())
+      if (i != World::current()->broken_bricks.end()) {
+        delete *i;
         World::current()->broken_bricks.erase(i);
+      }
     }
 }
 
@@ -133,8 +137,10 @@ BouncyBrick::action(double frame_ratio)
         = std::find(World::current()->bouncy_bricks.begin(), 
                     World::current()->bouncy_bricks.end(), 
                     this);
-      if (i != World::current()->bouncy_bricks.end())
+      if (i != World::current()->bouncy_bricks.end()) {
+        delete *i;
         World::current()->bouncy_bricks.erase(i);
+      }
     }
 }
 
@@ -196,8 +202,10 @@ FloatingScore::action(double frame_ratio)
         = std::find(World::current()->floating_scores.begin(), 
                     World::current()->floating_scores.end(), 
                     this);
-      if (i != World::current()->floating_scores.end())
+      if (i != World::current()->floating_scores.end()) {
+        delete *i;
         World::current()->floating_scores.erase(i);
+      }
     }
 }
 
