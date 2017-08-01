@@ -1,5 +1,3 @@
-//  $Id$
-// 
 //  SuperTux
 //  Copyright (C) 2004 Bill Kendrick <bill@newbreedsoftware.com>
 //                     Tobias Glaesser <tobi.web@gmx.de>

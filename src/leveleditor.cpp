@@ -1,5 +1,3 @@
-//  $Id$
-//
 //  SuperTux
 //  Copyright (C) 2003 Ricardo Cruz <rick2@aeiou.pt>
 //  Copyright (C) 2003 Tobias Glaesser <tobi.web@gmx.de>

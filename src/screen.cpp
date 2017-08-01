@@ -1,5 +1,3 @@
-//  $Id$
-//
 //  SuperTux -  A Jump'n Run
 //  Copyright (C) 2000 Bill Kendrick <bill@newbreedsoftware.com>
 //

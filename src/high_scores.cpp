@@ -1,5 +1,3 @@
-//  $Id$
-// 
 //  SuperTux
 //  Copyright (C) 2004 Adam Czachorowski <gislan@o2.pl>
 //

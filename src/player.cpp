@@ -1,5 +1,3 @@
-//  $Id$
-//
 //  SuperTux -  A Jump'n Run
 //  Copyright (C) 2003 Tobias Glaesser <tobi.web@gmx.de>
 //

@@ -1,5 +1,3 @@
-//  $Id$
-// 
 //  SuperTux
 //  Copyright (C) 2004 SuperTux Development Team, see AUTHORS for details
 //

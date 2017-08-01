@@ -1,5 +1,3 @@
-//  $Id$
-//
 //  SuperTux
 //  Copyright (C) 2004 Tobias Glaesser <tobi.web@gmx.de>
 //
