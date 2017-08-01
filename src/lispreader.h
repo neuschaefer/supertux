@@ -45,15 +45,6 @@
 #define LISP_TYPE_BOOLEAN       7
 #define LISP_TYPE_PATTERN_VAR   8
 
-#define LISP_PATTERN_ANY        1
-#define LISP_PATTERN_SYMBOL     2
-#define LISP_PATTERN_STRING     3
-#define LISP_PATTERN_INTEGER    4
-#define LISP_PATTERN_REAL       5
-#define LISP_PATTERN_BOOLEAN    6
-#define LISP_PATTERN_LIST       7
-#define LISP_PATTERN_OR         8
-
 typedef struct
   {
     int type;
@@ -95,14 +86,6 @@ struct _lisp_object_t
         char *string;
         int integer;
         float real;
-
-        struct
-          {
-            int type;
-            int index;
-            struct _lisp_object_t *sub;
-          }
-        pattern;
       } v;
   };
 
@@ -118,10 +101,6 @@ lisp_object_t* lisp_read_from_file(const std::string& filename);
 void lisp_free (lisp_object_t *obj);
 
 lisp_object_t* lisp_read_from_string (const char *buf);
-
-int lisp_compile_pattern (lisp_object_t **obj, int *num_subs);
-int lisp_match_pattern (lisp_object_t *pattern, lisp_object_t *obj, lisp_object_t **vars, int num_subs);
-int lisp_match_string (const char *pattern_string, lisp_object_t *obj, lisp_object_t **vars);
 
 int lisp_type (lisp_object_t *obj);
 int lisp_integer (lisp_object_t *obj);

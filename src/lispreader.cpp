@@ -375,29 +375,6 @@ lisp_make_boolean (int value)
   return obj;
 }
 
-static lisp_object_t*
-lisp_make_pattern_cons (lisp_object_t *car, lisp_object_t *cdr)
-{
-  lisp_object_t *obj = lisp_object_alloc(LISP_TYPE_PATTERN_CONS);
-
-  obj->v.cons.car = car;
-  obj->v.cons.cdr = cdr;
-
-  return obj;
-}
-
-static lisp_object_t*
-lisp_make_pattern_var (int type, int index, lisp_object_t *sub)
-{
-  lisp_object_t *obj = lisp_object_alloc(LISP_TYPE_PATTERN_VAR);
-
-  obj->v.pattern.type = type;
-  obj->v.pattern.index = index;
-  obj->v.pattern.sub = sub;
-
-  return obj;
-}
-
 lisp_object_t*
 lisp_read (lisp_stream_t *in)
 {
@@ -416,7 +393,6 @@ lisp_read (lisp_stream_t *in)
       return &end_marker;
 
     case TOKEN_OPEN_PAREN :
-    case TOKEN_PATTERN_OPEN_PAREN :
       {
         lisp_object_t *last = lisp_nil(), *car;
 
@@ -458,7 +434,7 @@ lisp_read (lisp_stream_t *in)
             else if (car != &close_paren_marker)
               {
                 if (lisp_nil_p(last))
-                  obj = last = (token == TOKEN_OPEN_PAREN ? lisp_make_cons(car, lisp_nil()) : lisp_make_pattern_cons(car, lisp_nil()));
+                  obj = last = lisp_make_cons(car, lisp_nil());
                 else
                   last = last->v.cons.cdr = lisp_make_cons(car, lisp_nil());
               }
@@ -520,7 +496,6 @@ lisp_free (lisp_object_t *obj)
       break;
 
     case LISP_TYPE_CONS :
-    case LISP_TYPE_PATTERN_CONS :
       /* If we just recursively free car and cdr we risk a stack
          overflow because lists may be nested arbitrarily deep.
 
@@ -536,8 +511,7 @@ lisp_free (lisp_object_t *obj)
            ((a . b) . c) -> (a . (b . c))
       */
       if (!lisp_nil_p(obj->v.cons.car)
-        && (lisp_type(obj->v.cons.car) == LISP_TYPE_CONS
-        || lisp_type(obj->v.cons.car) == LISP_TYPE_PATTERN_CONS))
+        && (lisp_type(obj->v.cons.car) == LISP_TYPE_CONS))
         {
         /* this is the transformation */
 
@@ -570,10 +544,6 @@ lisp_free (lisp_object_t *obj)
 
         goto restart;
         }
-
-    case LISP_TYPE_PATTERN_VAR :
-      lisp_free(obj->v.pattern.sub);
-      break;
     }
 
   free(obj);
@@ -586,261 +556,6 @@ lisp_read_from_string (const char *buf)
 
   lisp_stream_init_string(&stream, (char*)buf);
   return lisp_read(&stream);
-}
-
-static int
-_compile_pattern (lisp_object_t **obj, int *index)
-{
-  if (*obj == 0)
-    return 1;
-
-  switch (lisp_type(*obj))
-    {
-    case LISP_TYPE_PATTERN_CONS :
-      {
-        struct
-          {
-            char *name;
-            int type;
-          }
-        types[] =
-          {
-            { "any", LISP_PATTERN_ANY },
-            { "symbol", LISP_PATTERN_SYMBOL },
-            { "string", LISP_PATTERN_STRING },
-            { "integer", LISP_PATTERN_INTEGER },
-            { "real", LISP_PATTERN_REAL },
-            { "boolean", LISP_PATTERN_BOOLEAN },
-            { "list", LISP_PATTERN_LIST },
-            { "or", LISP_PATTERN_OR },
-            { 0, 0 }
-          };
-        char *type_name;
-        int type;
-        int i;
-        lisp_object_t *pattern;
-        type = -1;
-	
-        if (lisp_type(lisp_car(*obj)) != LISP_TYPE_SYMBOL)
-          return 0;
-
-        type_name = lisp_symbol(lisp_car(*obj));
-        for (i = 0; types[i].name != 0; ++i)
-          {
-            if (strcmp(types[i].name, type_name) == 0)
-              {
-                type = types[i].type;
-                break;
-              }
-          }
-
-        if (types[i].name == 0)
-          return 0;
-
-        if (type != LISP_PATTERN_OR && lisp_cdr(*obj) != 0)
-          return 0;
-
-        pattern = lisp_make_pattern_var(type, (*index)++, lisp_nil());
-
-        if (type == LISP_PATTERN_OR)
-          {
-            lisp_object_t *cdr = lisp_cdr(*obj);
-
-            if (!_compile_pattern(&cdr, index))
-              {
-                lisp_free(pattern);
-                return 0;
-              }
-
-            pattern->v.pattern.sub = cdr;
-
-            (*obj)->v.cons.cdr = lisp_nil();
-          }
-
-        lisp_free(*obj);
-
-        *obj = pattern;
-      }
-      break;
-
-    case LISP_TYPE_CONS :
-      if (!_compile_pattern(&(*obj)->v.cons.car, index))
-        return 0;
-      if (!_compile_pattern(&(*obj)->v.cons.cdr, index))
-        return 0;
-      break;
-    }
-
-  return 1;
-}
-
-int
-lisp_compile_pattern (lisp_object_t **obj, int *num_subs)
-{
-  int index = 0;
-  int result;
-
-  result = _compile_pattern(obj, &index);
-
-  if (result && num_subs != 0)
-    *num_subs = index;
-
-  return result;
-}
-
-static int _match_pattern (lisp_object_t *pattern, lisp_object_t *obj, lisp_object_t **vars);
-
-static int
-_match_pattern_var (lisp_object_t *pattern, lisp_object_t *obj, lisp_object_t **vars)
-{
-  assert(lisp_type(pattern) == LISP_TYPE_PATTERN_VAR);
-
-  switch (pattern->v.pattern.type)
-    {
-    case LISP_PATTERN_ANY :
-      break;
-
-    case LISP_PATTERN_SYMBOL :
-      if (obj == 0 || lisp_type(obj) != LISP_TYPE_SYMBOL)
-        return 0;
-      break;
-
-    case LISP_PATTERN_STRING :
-      if (obj == 0 || lisp_type(obj) != LISP_TYPE_STRING)
-        return 0;
-      break;
-
-    case LISP_PATTERN_INTEGER :
-      if (obj == 0 || lisp_type(obj) != LISP_TYPE_INTEGER)
-        return 0;
-      break;
-
-    case LISP_PATTERN_REAL :
-      if (obj == 0 || lisp_type(obj) != LISP_TYPE_REAL)
-        return 0;
-      break;
-
-    case LISP_PATTERN_BOOLEAN :
-      if (obj == 0 || lisp_type(obj) != LISP_TYPE_BOOLEAN)
-        return 0;
-      break;
-
-    case LISP_PATTERN_LIST :
-      if (obj == 0 || lisp_type(obj) != LISP_TYPE_CONS)
-        return 0;
-      break;
-
-    case LISP_PATTERN_OR :
-      {
-        lisp_object_t *sub;
-        int matched = 0;
-
-        for (sub = pattern->v.pattern.sub; sub != 0; sub = lisp_cdr(sub))
-          {
-            assert(lisp_type(sub) == LISP_TYPE_CONS);
-
-            if (_match_pattern(lisp_car(sub), obj, vars))
-              matched = 1;
-          }
-
-        if (!matched)
-          return 0;
-      }
-      break;
-
-    default :
-      assert(0);
-    }
-
-  if (vars != 0)
-    vars[pattern->v.pattern.index] = obj;
-
-  return 1;
-}
-
-static int
-_match_pattern (lisp_object_t *pattern, lisp_object_t *obj, lisp_object_t **vars)
-{
-  if (pattern == 0)
-    return obj == 0;
-
-  if (obj == 0)
-    return 0;
-
-  if (lisp_type(pattern) == LISP_TYPE_PATTERN_VAR)
-    return _match_pattern_var(pattern, obj, vars);
-
-  if (lisp_type(pattern) != lisp_type(obj))
-    return 0;
-
-  switch (lisp_type(pattern))
-    {
-    case LISP_TYPE_SYMBOL :
-      return strcmp(lisp_symbol(pattern), lisp_symbol(obj)) == 0;
-
-    case LISP_TYPE_STRING :
-      return strcmp(lisp_string(pattern), lisp_string(obj)) == 0;
-
-    case LISP_TYPE_INTEGER :
-      return lisp_integer(pattern) == lisp_integer(obj);
-
-    case LISP_TYPE_REAL :
-      return lisp_real(pattern) == lisp_real(obj);
-
-    case LISP_TYPE_CONS :
-      {
-        int result1, result2;
-
-        result1 = _match_pattern(lisp_car(pattern), lisp_car(obj), vars);
-        result2 = _match_pattern(lisp_cdr(pattern), lisp_cdr(obj), vars);
-
-        return result1 && result2;
-      }
-      break;
-
-    default :
-      assert(0);
-    }
-
-  return 0;
-}
-
-int
-lisp_match_pattern (lisp_object_t *pattern, lisp_object_t *obj, lisp_object_t **vars, int num_subs)
-{
-  int i;
-
-  if (vars != 0)
-    for (i = 0; i < num_subs; ++i)
-      vars[i] = &error_object;
-
-  return _match_pattern(pattern, obj, vars);
-}
-
-int
-lisp_match_string (const char *pattern_string, lisp_object_t *obj, lisp_object_t **vars)
-{
-  lisp_object_t *pattern;
-  int result;
-  int num_subs;
-
-  pattern = lisp_read_from_string(pattern_string);
-
-  if (pattern != 0 && (lisp_type(pattern) == LISP_TYPE_EOF
-                       || lisp_type(pattern) == LISP_TYPE_PARSE_ERROR))
-    return 0;
-
-  if (!lisp_compile_pattern(&pattern, &num_subs))
-    {
-      lisp_free(pattern);
-      return 0;
-    }
-
-  result = lisp_match_pattern(pattern, obj, vars, num_subs);
-
-  lisp_free(pattern);
-
-  return result;
 }
 
 int
@@ -896,7 +611,7 @@ lisp_real (lisp_object_t *obj)
 lisp_object_t*
 lisp_car (lisp_object_t *obj)
 {
-  assert(obj->type == LISP_TYPE_CONS || obj->type == LISP_TYPE_PATTERN_CONS);
+  assert(obj->type == LISP_TYPE_CONS);
 
   return obj->v.cons.car;
 }
@@ -904,7 +619,7 @@ lisp_car (lisp_object_t *obj)
 lisp_object_t*
 lisp_cdr (lisp_object_t *obj)
 {
-  assert(obj->type == LISP_TYPE_CONS || obj->type == LISP_TYPE_PATTERN_CONS);
+  assert(obj->type == LISP_TYPE_CONS);
 
   return obj->v.cons.cdr;
 }
@@ -932,7 +647,7 @@ lisp_list_length (lisp_object_t *obj)
 
   while (obj != 0)
     {
-      assert(obj->type == LISP_TYPE_CONS || obj->type == LISP_TYPE_PATTERN_CONS);
+      assert(obj->type == LISP_TYPE_CONS);
 
       ++length;
       obj = obj->v.cons.cdr;
@@ -947,7 +662,7 @@ lisp_list_nth_cdr (lisp_object_t *obj, int index)
   while (index > 0)
     {
       assert(obj != 0);
-      assert(obj->type == LISP_TYPE_CONS || obj->type == LISP_TYPE_PATTERN_CONS);
+      assert(obj->type == LISP_TYPE_CONS);
 
       --index;
       obj = obj->v.cons.cdr;
@@ -1013,7 +728,6 @@ lisp_dump (lisp_object_t *obj, FILE *out)
       break;
 
     case LISP_TYPE_CONS :
-    case LISP_TYPE_PATTERN_CONS :
       fputs(lisp_type(obj) == LISP_TYPE_CONS ? "(" : "#?(", out);
       while (obj != 0)
         {
@@ -1021,8 +735,7 @@ lisp_dump (lisp_object_t *obj, FILE *out)
           obj = lisp_cdr(obj);
           if (obj != 0)
             {
-              if (lisp_type(obj) != LISP_TYPE_CONS
-                  && lisp_type(obj) != LISP_TYPE_PATTERN_CONS)
+              if (lisp_type(obj) != LISP_TYPE_CONS)
                 {
                   fputs(" . ", out);
                   lisp_dump(obj, out);
