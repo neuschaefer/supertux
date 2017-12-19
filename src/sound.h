@@ -19,7 +19,7 @@
 #ifndef SUPERTUX_SOUND_H
 #define SUPERTUX_SOUND_H
 
-#include "defines.h"     /* get YES/NO defines */
+#include "defines.h"     /* get DyingType and Direction */
 
 /*global variable*/
 extern bool use_sound;           /* handle sound on/off menu and command-line option */

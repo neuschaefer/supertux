@@ -88,7 +88,7 @@ Timer::stop()
     init(false);
 }
 
-int
+bool
 Timer::check()
 {
   if((time != 0) && (time + period > get_ticks()))

@@ -42,11 +42,10 @@ class Timer
   void stop();
 
   /*======================================================================
-    return: NO  = the timer is not started
-    or it is over
-    YES = otherwise
+    return: false = the timer is not started or it is over
+            true  = otherwise
     ======================================================================*/
-  int check();
+  bool check();
   int started();
 
   /*======================================================================
